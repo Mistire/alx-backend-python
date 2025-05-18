@@ -1,12 +1,31 @@
+### `python-generators-0x00` - ALX Backend Python
 
-# Python Generators - Task 0: Streaming Rows from MySQL
+This project demonstrates how to use Python generators to efficiently interact with a MySQL database.
 
-This task sets up a MySQL database and populates it with user data from a CSV file using Python.
 
-## What the script does
+#### Task 0: Getting Started with Python Generators
 
-- Connects to MySQL server
-- Creates a database `ALX_prodev` if it doesn't exist
-- Creates a table `user_data` with fields: `user_id`, `name`, `email`, `age`
-- Loads data from `user_data.csv` into the table
-- Prints 5 sample rows from the table
+* Set up MySQL database `ALX_prodev` and a `user_data` table.
+* Loaded sample data from a CSV file (`user_data.csv`).
+* Functions implemented:
+
+  * `connect_db()`
+  * `create_database(connection)`
+  * `connect_to_prodev()`
+  * `create_table(connection)`
+  * `insert_data(connection, data)`
+
+
+#### Task 1: Generator That Streams Rows
+
+* Implemented a generator function `stream_users()` in `0-stream_users.py`.
+* Streams rows from the `user_data` table **one at a time** using Python's `yield`.
+* Efficient for working with large datasets.
+
+
+### Task 2: Batch Processing Large Data
+- Implemented a generator that streams users in batches from the SQL database.
+- Filtered users over age 25 during processing.
+- Functions:
+  - `stream_users_in_batches(batch_size)`
+  - `batch_processing(batch_size)`
