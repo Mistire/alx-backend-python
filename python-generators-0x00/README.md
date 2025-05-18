@@ -37,3 +37,10 @@ This project demonstrates how to use Python generators to efficiently interact w
 - Created `lazy_paginate(page_size)` generator that yields pages of users on demand.  
 - Uses a single loop and stops when no more data is returned.  
 - Efficiently loads large datasets page-by-page without loading all rows at once.
+
+#### 4. Task4: Memory-Efficient Aggregation with Generators
+
+- Implements a generator function `stream_user_ages()` that yields user ages one by one from the database.
+- Calculates the average age without loading the entire dataset into memory.
+- Uses no more than two loops and does **not** use SQL's built-in `AVERAGE` function.
+- Prints the average age with two decimal places.
