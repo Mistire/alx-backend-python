@@ -21,7 +21,9 @@ def stream_users_in_batches(batch_size):
   connection.close()
 
 def batch_processing(batch_size):
+  processed_users = []
   for batch in stream_users_in_batches(batch_size):
     for user in batch:
       if int(user['age']) > 25:
-        yield user
+        processed_users.append(user)
+  return processed_users
