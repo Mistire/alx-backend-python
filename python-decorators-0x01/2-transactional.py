@@ -21,6 +21,7 @@ def transactional(func):
     try:
       res = func(conn, *args, **kwargs)
       conn.commit()
+      return res
     except Exception as e:
       conn.rollback()
       return e
