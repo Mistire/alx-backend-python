@@ -8,6 +8,7 @@ def with_db_connection(func):
             func(conn, *args, **kwargs)
         finally:
             conn.close()
+    return wrapper
 
 @with_db_connection 
 def get_user_by_id(conn, user_id): 
