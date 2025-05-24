@@ -4,7 +4,7 @@ import functools
 def with_db_connection(func):
     def wrapper(*args, **kwargs):
         try:
-            conn = sqlite3.connect()
+            conn = sqlite3.connect("test.db")
             res = func(conn, *args, **kwargs)
             return res
         finally:
