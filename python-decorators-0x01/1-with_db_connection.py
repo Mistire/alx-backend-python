@@ -5,7 +5,8 @@ def with_db_connection(func):
     def wrapper(*args, **kwargs):
         try:
             conn = sqlite3.connect()
-            func(conn, *args, **kwargs)
+            res = func(conn, *args, **kwargs)
+            return res
         finally:
             conn.close()
     return wrapper
