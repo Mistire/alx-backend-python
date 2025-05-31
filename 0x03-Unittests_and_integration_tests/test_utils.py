@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 
 import unittest
 from typing import Dict, List, Any
@@ -35,22 +35,18 @@ class TestAccessNestedMap(unittest.TestCase):
 class TestGetJson(unittest.TestCase):
   """Unit test for the `get_json` function in `utils`"""
 
-
-  def test_get_json(self):
-    """Test that `get_json` returns expected JSON response"""
-
-    test_case = [
-      ("http://example.com", {"payload": True}),
-      ("http://holberton.io", {"payload": False}),
-    ]
-    for test_url, test_payload in test_case:
-      mock_response = Mock()
-      mock_response.json.return_value = test_payload
-      with patch('utils.requests.get', return_value=test_payload) as mock_get:
-        result = get_json(test_url)
-
-        self.assertEqual(result, test_payload)
-        mock_get.assert_called_once_with(test_url)
+  @parameterized.expand([
+    ("http://example.com", {"payload": True}),
+    ("http://holberton.io", {"payload": False}),
+  ])
+  def test_get_json(self, test_url, test_payload):
+    """Test get_json"""
+    config = {'return_value.json.return_value': test_payload}
+    patcher = patch('requests.get', **config)
+    mock = patcher.start()
+    self.assertEqual(get_json(test_url), test_payload)
+    mock.assert_called_once()
+    patcher.stop()
 
 
 
