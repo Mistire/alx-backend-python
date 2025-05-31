@@ -1,4 +1,11 @@
 #!/usr/bin/env python3
+"""
+This module contains unit tests for the utility functions:
+- access_nested_map
+- get_json
+- memoize
+"""
+
 import unittest
 from typing import Dict, List, Any
 from unittest.mock import patch
