@@ -1,14 +1,11 @@
 #!/usr/bin/env python3
-
 import unittest
 from typing import Dict, List, Any
 from unittest.mock import Mock, patch
 from parameterized import parameterized
 from utils import access_nested_map, get_json, memoize
-
 class TestAccessNestedMap(unittest.TestCase):
   """Unit tests for the `access_nested_map` function from the `utils` module."""
-  
   @parameterized.expand([
     ({"a": 1}, ["a"], 1),
     ({"a": {"b": 2}}, ["a"], {"b": 2}),
@@ -19,8 +16,6 @@ class TestAccessNestedMap(unittest.TestCase):
     Test that `access_nested_map` returns the correct value when given valid nested maps and path. 
     """
     self.assertEqual(access_nested_map(nested_map, path), expected) 
-
-
   @parameterized.expand([
     ({}, ["a"]),
     ({"a": 1}, ["a", "b"])
@@ -31,7 +26,6 @@ class TestAccessNestedMap(unittest.TestCase):
     """
     with self.assertRaises(KeyError):
       access_nested_map(nested_map, path)
-
 class TestGetJson(unittest.TestCase):
   """Unit test for the `get_json` function in `utils`"""
 
@@ -47,7 +41,6 @@ class TestGetJson(unittest.TestCase):
     self.assertEqual(get_json(test_url), test_payload)
     mock.assert_called_once()
     patcher.stop()
-
 class TestMemoize(unittest.TestCase):
   """Unit test for methods using memoization"""
 
@@ -67,11 +60,5 @@ class TestMemoize(unittest.TestCase):
       test_class.a_property()
       test_class.a_property()
       mock.assert_called_once()
-      
-  
-
-
-
-
 if '__main__' == __name__:
   unittest.main()
