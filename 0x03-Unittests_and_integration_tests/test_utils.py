@@ -35,14 +35,15 @@ class TestAccessNestedMap(unittest.TestCase):
 class TestGetJson(unittest.TestCase):
   """Unit test for the `get_json` function in `utils`"""
 
+
   def test_get_json(self):
-    test_cases = [
+    """Test that `get_json` returns expected JSON response"""
+
+    test_case = [
       ("http://example.com", {"payload": True}),
       ("http://holberton.io", {"payload": False}),
     ]
-
-    for test_url, test_payload in test_cases:
-      
+    for test_url, test_payload in test_case:
       mock_response = Mock()
       mock_response.json.return_value = test_payload
       with patch('utils.requests.get', return_value=test_payload) as mock_get:
