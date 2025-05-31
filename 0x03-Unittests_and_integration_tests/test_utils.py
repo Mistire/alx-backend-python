@@ -49,9 +49,11 @@ class TestGetJson(unittest.TestCase):
     patcher.stop()
 
 class TestMemoize(unittest.TestCase):
+  """Unit test for methods using memoization"""
 
   def test_memoize(self):
     class TestClass:
+      """Class for handling methods"""
 
       def a_method(self):
         return 42
