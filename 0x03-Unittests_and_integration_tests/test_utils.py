@@ -7,7 +7,7 @@ from utils import access_nested_map, get_json, memoize
 
 
 class TestAccessNestedMap(unittest.TestCase):
-    """Unit tests for the `access_nested_map` function from the `utils` module."""
+    """Unit test for the `access_nested_map` function."""
 
     @parameterized.expand([
         ({"a": 1}, ["a"], 1),
