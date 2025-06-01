@@ -3,11 +3,12 @@ from django.contrib.auth.models import AbstractUser
 import uuid
 
 class User(AbstractUser):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    user_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     first_name = models.CharField(max_length=30)  
     last_name = models.CharField(max_length=30)
     email = models.EmailField(unique=True)
     phone_number = models.CharField(max_length=15, blank=True, null=True)
+    password = models.CharField(max_length=128)
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']  
 
