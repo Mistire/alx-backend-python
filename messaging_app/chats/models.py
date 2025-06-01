@@ -1,16 +1,31 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+import uuid
 
-# Create your models here.
 class User(AbstractUser):
-  pass
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    email = models.EmailField(unique=True)
+    phone_number = models.CharField(max_length=15, blank=True, null=True)
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['username']  # Keep username if AbstractUser requires it
+
+    def __str__(self):
+        return self.email
 
 class Conversation(models.Model):
-  users =  models.ManyToManyField('User', related_name='conversation')
-  created_at = models.DateTimeField(auto_now_add=True)
+    conversation_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    participants = models.ManyToManyField(User, related_name='conversations')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Conversation {self.conversation_id}"
 
 class Message(models.Model):
-  sender = models.ForeignKey('User', on_delete=models.CASCADE)
-  Conversation = models.ForeignKey('conversation', on_delete=models.CASCADE, realted_name='messages')
-  content = models.TextField()
-  timestamp = models.DateTimeField(auto_now_add=True)
+    message_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    sender = models.ForeignKey(User, on_delete=models.CASCADE)
+    conversation = models.ForeignKey(Conversation, on_delete=models.CASCADE, related_name='messages')
+    message_body = models.TextField()
+    sent_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"From {self.sender.email} at {self.sent_at}"
