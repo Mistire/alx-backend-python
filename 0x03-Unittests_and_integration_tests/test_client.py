@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 import unittest
 from unittest.mock import PropertyMock, patch
 from parameterized import parameterized
