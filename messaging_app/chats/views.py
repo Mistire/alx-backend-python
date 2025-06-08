@@ -1,4 +1,4 @@
-from rest_framework import viewsets, status
+from rest_framework import viewsets, status, filters  # ✅ filters added here
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from .models import Conversation, Message, User
@@ -9,9 +9,10 @@ class ConversationViewSet(viewsets.ModelViewSet):
     queryset = Conversation.objects.all()
     serializer_class = ConversationSerializer
     permission_classes = [IsAuthenticated]
+    filter_backends = [filters.SearchFilter] 
+    search_fields = ['participants__email']   
 
     def get_queryset(self):
-        # Only return conversations the user is part of
         return self.request.user.conversations.all()
 
     def create(self, request, *args, **kwargs):
@@ -19,7 +20,6 @@ class ConversationViewSet(viewsets.ModelViewSet):
         if not participant_ids:
             return Response({"error": "Participants are required"}, status=status.HTTP_400_BAD_REQUEST)
 
-        # Include the current user automatically
         participants = User.objects.filter(user_id__in=participant_ids)
         if request.user not in participants:
             participants = list(participants) + [request.user]
@@ -33,9 +33,10 @@ class MessageViewSet(viewsets.ModelViewSet):
     queryset = Message.objects.all()
     serializer_class = MessageSerializer
     permission_classes = [IsAuthenticated]
+    filter_backends = [filters.SearchFilter]  
+    search_fields = ['message_body']          
 
     def get_queryset(self):
-        # Return only messages from conversations the user is part of
         return Message.objects.filter(conversation__participants=self.request.user)
 
     def create(self, request, *args, **kwargs):
