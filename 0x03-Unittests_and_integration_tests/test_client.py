@@ -6,14 +6,6 @@ from parameterized import parameterized, parameterized_class
 from client import GithubOrgClient
 from fixtures import TEST_PAYLOAD
 
-class MockResponse:
-    """A Class for making mock response"""
-    def __init__(self, json_data):
-        self._json_data = json_data
-
-    def json(self):
-        return self._json_data
-
 
 class TestGithubOrgClient(unittest.TestCase):
     """Test different GithubOrg functionality"""
@@ -74,16 +66,6 @@ class TestGithubOrgClient(unittest.TestCase):
         self.assertEqual(client.has_license(repo, license_key), expected)
 
 
-
-
-@parameterized_class(
-
-        ("org_payload",
-        "repos_payload",
-        "expected_repos",
-        "apache2_repos"), TEST_PAYLOAD
-    
-)
 @parameterized_class(
     ("org_payload", "repos_payload", "expected_repos", "apache2_repos"),
     TEST_PAYLOAD
@@ -101,12 +83,14 @@ class TestIntegrationGithubOrgClient(unittest.TestCase):
         #         return cls.org_payload
         #     return cls.repos_payload
 
-        config = {'return_value.json.side_effect':
-                [
-                    cls.org_payload, cls.repos_payload,
-                    cls.org_payload, cls.repos_payload
+        config = {
+            'return_value.json.side_effect': [
+                cls.org_payload,
+                cls.repos_payload,
+                cls.org_payload,
+                cls.repos_payload
                 ]
-        }
+            }
         cls.get_patcher = patch('requests.get', **config)
 
         cls.mock = cls.get_patcher.start()
@@ -135,6 +119,7 @@ class TestIntegrationGithubOrgClient(unittest.TestCase):
     def tearDownClass(cls):
         """A class method called after tests in an individual class have run"""
         cls.get_patcher.stop()
+
 
 if "__main__" == __name__:
     unittest.main()
