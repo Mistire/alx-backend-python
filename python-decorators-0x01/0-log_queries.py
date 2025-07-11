@@ -1,9 +1,6 @@
 import sqlite3
 import functools
-import logging
-
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
-logger = logging.getLogger(__name__)
+from datetime import datetime
 
 #### decorator to lof SQL queries
 
@@ -11,14 +8,14 @@ def log_queries(func):
     @functools.wraps(func)
     def wrapper(*args, **kwargs):
         sql_query = args[0] if args else kwargs.get('query')
-        logger.info(f"Executing SQL query: {sql_query}")
+        print(f"Executing SQL query: {sql_query}")
 
         try:
             result = func(*args, **kwargs)
-            logger.info("SQL query executed successfully.")
+            print("SQL query executed successfully.")
             return result
         except Exception as e:
-            logger.error(f"Error executing SQL query: {e}")
+            print(f"Error executing SQL query: {e}")
             raise
         
     return wrapper
