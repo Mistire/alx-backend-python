@@ -29,30 +29,20 @@ class TestAccessNestedMap(unittest.TestCase):
 
 class TestGetJson(unittest.TestCase):
   """A class to test get_json function"""
-
+  @parameterized.expand([
+    ("http://example.com", {"payload": True}),
+    ("http://holberton.io", {"payload": False}),
+  ])
   @patch('utils.requests.get')
-  def test_get_json(self, mock_get):
+  def test_get_json(self, url, expected, mock_get):
     """A function to test get_json function"""
-    def mock_get_side_effect(url):
-      mock_response = Mock()
-      if url == "http://example.com":
-        mock_response.json.return_value = {"payload": "True"}
-      elif url == "http://holberton.io":
-        mock_response.json.return_value = {"payload": "False"}
-      else:
-        mock_response.json.return_value = {"error": "not found"}
-      return mock_response
-    
-    mock_get.side_effect = mock_get_side_effect
+    mock_reponse = Mock()
+    mock_reponse.json.return_value = expected
+    mock_get.return_value = mock_reponse
 
-    result1 = get_json("http://example.com")
-    self.assertEqual(result1, {"payload": "True"})
-    result2 = get_json("http://holberton.io")
-    self.assertEqual(result2, {"payload": "False"})
-
-    self.assertEqual(mock_get.call_count, 2)
-    mock_get.assert_any_call("http://example.com")
-    mock_get.assert_any_call("http://holberton.io")
+    result = get_json(url)
+    self.assertEqual(result, expected)
+    mock_get.assert_called_once_with(url)
 
 
 
