@@ -4,8 +4,7 @@ import unittest
 from unittest.mock import patch, Mock
 from parameterized import parameterized
 from utils import access_nested_map, get_json, memoize
-
-
+"""Unit tests for utils.py functions."""
 class TestAccessNestedMap(unittest.TestCase):
     """A class to test access_nested_map function"""
 
