@@ -7,6 +7,7 @@ from client import GithubOrgClient
 from parameterized import parameterized, parameterized_class
 from fixtures import TEST_PAYLOAD
 
+
 class TestGithubOrgClient(unittest.TestCase):
     """Test different GithubOrg functionality"""
 
@@ -104,7 +105,6 @@ class TestIntegrationGithubOrgClient(unittest.TestCase):
         self.assertEqual(client.public_repos("XLICENSE"), [])
         self.assertEqual(client.public_repos("apache-2.0"), self.apache2_repos)
         self.mock_get.assert_called()
-
 
 
 if __name__ == '__main__':
