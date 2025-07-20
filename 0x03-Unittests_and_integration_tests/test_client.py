@@ -26,9 +26,10 @@ class TestGithubOrgClient(unittest.TestCase):
     """Test that _public_repos_url returns correct URL"""
     expected = "https://api.github.com/orgs/testorg/repos"
 
-    with patch.object(GithubOrgClient, 'org', return_value={"repos_url": expected}):
-        client = GithubOrgClient("testorg")
-        self.assertEqual(client._public_repos_url, expected)
+    with patch.object(GithubOrgClient, 'org', new_callable=PropertyMock) as mock_org:
+      mock_org.return_value = {"repos_url": expected}
+      client = GithubOrgClient("testorg")
+      self.assertEqual(client._public_repos_url, expected)
 
   
 
