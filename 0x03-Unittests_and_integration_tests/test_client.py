@@ -31,14 +31,14 @@ class TestGithubOrgClient(unittest.TestCase):
         expected = "https://api.github.com/orgs/testorg/repos"
         with patch.object(
             GithubOrgClient, 'org', new_callable=PropertyMock
-            ) as mock_org:
+        ) as mock_org:
             mock_org.return_value = {"repos_url": expected}
             client = GithubOrgClient("testorg")
             self.assertEqual(client._public_repos_url, expected)
 
     @patch('client.get_json')
     @patch(
-        'client.GithubOrgClient._public_repos_url', 
+        'client.GithubOrgClient._public_repos_url',
         new_callable=PropertyMock
         )
     def test_public_repos(self, mock_url, mock_get_json):
