@@ -4,8 +4,8 @@
 import unittest
 from unittest.mock import PropertyMock, patch
 from client import GithubOrgClient
-from parameterized import parameterized
-
+from parameterized import parameterized, parameterized_class
+from fixtures import TEST_PAYLOAD
 
 class TestGithubOrgClient(unittest.TestCase):
     """Test different GithubOrg functionality"""
@@ -61,6 +61,50 @@ class TestGithubOrgClient(unittest.TestCase):
         """Test if GithubOrgClient returns the right output for has_license"""
         client = GithubOrgClient("test")
         self.assertEqual(client.has_license(repo, license_key), expected)
+
+
+@parameterized_class(
+    ("org_payload", "repos_payload", "expected_repos", "apache2_repos"),
+    TEST_PAYLOAD
+)
+class TestIntegrationGithubOrgClient(unittest.TestCase):
+    """Integration tests with mocked HTTP responses"""
+
+    @classmethod
+    def setUpClass(cls):
+        """Patch requests.get and set side effects"""
+        config = {
+            'return_value.json.side_effect': [
+                cls.org_payload,
+                cls.repos_payload,
+                cls.org_payload,
+                cls.repos_payload
+            ]
+        }
+        cls.get_patcher = patch('requests.get', **config)
+        cls.mock_get = cls.get_patcher.start()
+
+    @classmethod
+    def tearDownClass(cls):
+        """Stop the requests.get patcher"""
+        cls.get_patcher.stop()
+
+    def test_public_repos(self):
+        """Test public_repos() with and without license"""
+        client = GithubOrgClient("google")
+        self.assertEqual(client.org, self.org_payload)
+        self.assertEqual(client.public_repos(), self.expected_repos)
+        self.assertEqual(client.public_repos("XLICENSE"), [])
+        self.mock_get.assert_called()
+
+    def test_public_repos_with_license(self):
+        """Test public_repos() filters by license"""
+        client = GithubOrgClient("google")
+        self.assertEqual(client.public_repos(), self.expected_repos)
+        self.assertEqual(client.public_repos("XLICENSE"), [])
+        self.assertEqual(client.public_repos("apache-2.0"), self.apache2_repos)
+        self.mock_get.assert_called()
+
 
 
 if __name__ == '__main__':
