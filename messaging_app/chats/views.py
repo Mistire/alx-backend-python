@@ -1,3 +1,4 @@
+from .filters import MessageFilter
 from .pagination import MessagePagination
 from .permissions import IsOwnerOrReadOnly, IsParticipantOfConversation
 from rest_framework import viewsets, status, filters
@@ -8,6 +9,7 @@ from .serializers import ConversationSerializer, MessageSerializer
 from django.shortcuts import get_object_or_404
 from rest_framework_simplejwt.views import TokenObtainPairView
 from .auth import MyTokenObtainPairSerializer
+from django_filters.rest_framework import DjangoFilterBackend
 
 class ConversationViewSet(viewsets.ModelViewSet):
     queryset = Conversation.objects.all()
@@ -39,7 +41,9 @@ class MessageViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated, IsOwnerOrReadOnly, IsParticipantOfConversation]
     filter_backends = [filters.SearchFilter]  
     search_fields = ['message_body']
-    pagination_class = MessagePagination       
+    pagination_class = MessagePagination
+    filter_backends = [DjangoFilterBackend]
+    filterset_class = MessageFilter     
 
     def get_queryset(self):
         return Message.objects.filter(conversation__participants=self.request.user)
