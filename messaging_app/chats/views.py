@@ -1,4 +1,5 @@
-from .permissions import IsOwnerOrReadOnly
+from .pagination import MessagePagination
+from .permissions import IsOwnerOrReadOnly, IsParticipantOfConversation
 from rest_framework import viewsets, status, filters
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
@@ -11,7 +12,7 @@ from .auth import MyTokenObtainPairSerializer
 class ConversationViewSet(viewsets.ModelViewSet):
     queryset = Conversation.objects.all()
     serializer_class = ConversationSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsParticipantOfConversation]
     filter_backends = [filters.SearchFilter] 
     search_fields = ['participants__email']   
 
@@ -35,9 +36,10 @@ class ConversationViewSet(viewsets.ModelViewSet):
 class MessageViewSet(viewsets.ModelViewSet):
     queryset = Message.objects.all()
     serializer_class = MessageSerializer
-    permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
+    permission_classes = [IsAuthenticated, IsOwnerOrReadOnly, IsParticipantOfConversation]
     filter_backends = [filters.SearchFilter]  
-    search_fields = ['message_body']          
+    search_fields = ['message_body']
+    pagination_class = MessagePagination       
 
     def get_queryset(self):
         return Message.objects.filter(conversation__participants=self.request.user)
