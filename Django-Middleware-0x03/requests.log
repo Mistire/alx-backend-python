@@ -6,3 +6,8 @@
 2025-08-06 12:58:15.079793 - User: admin@test.com - Path: /api/messages
 2025-08-06 12:58:15.101442 - User: admin@test.com - Path: /api/messages/
 2025-08-06 12:58:40.985707 - User: admin@test.com - Path: /api/conversations/
+2025-08-06 16:17:38.232863 - User: admin@test.com - Path: /
+2025-08-06 16:17:38.951516 - User: admin@test.com - Path: /favicon.ico
+2025-08-06 16:17:41.534964 - User: admin@test.com - Path: /api/
+2025-08-06 16:17:44.128754 - User: admin@test.com - Path: /api/messages/
+2025-08-06 16:18:00.955408 - User: admin@test.com - Path: /api/messages/
