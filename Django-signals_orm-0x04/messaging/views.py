@@ -36,5 +36,6 @@ def get_all_replies(message):
 
 @login_required
 def unread_messages_view(request):
-    unread_msgs = Message.unread.unread_for_user(request.user)
+    unread_msgs_qs = Message.unread.unread_for_user(request.user)
+    unread_msgs = unread_msgs_qs.only('id', 'sender', 'content', 'timestamp')
     return render(request, "messaging/unread_messages.html", {"messages": unread_msgs})
