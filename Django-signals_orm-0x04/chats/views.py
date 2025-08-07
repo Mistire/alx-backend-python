@@ -75,8 +75,12 @@ class MessageViewSet(viewsets.ModelViewSet):
 class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
 
-@cache_page(60)  # cache timeout 60 seconds
+@cache_page(60)  
 def conversation_messages_view(request, conversation_id):
-    # Fetch messages for the conversation
     messages = Message.objects.filter(conversation_id=conversation_id).order_by('timestamp')
     return render(request, "chats/conversation.html", {"messages": messages})
+
+@cache_page(60)
+def message_list(request):
+    messages = Message.objects.all()
+    return render(request, "messages/message_list.html", {"messages": messages})
