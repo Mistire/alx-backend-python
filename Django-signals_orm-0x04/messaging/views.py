@@ -14,7 +14,7 @@ def delete_user(request):
 
 
 def get_threaded_messages_for_user(user):
-    root_messages = Message.objects.filter(receiver=user, parent_message__isnull=True)\
+    root_messages = Message.objects.filter(sender=request.user, receiver=user, parent_message__isnull=True)\
         .select_related('sender', 'receiver')\
         .prefetch_related(
             Prefetch('replies', queryset=Message.objects.select_related('sender', 'receiver'))
