@@ -32,3 +32,6 @@ def get_all_replies(message):
 
     fetch_replies(message)
     return replies
+
+def unread_messages_view(request):
+    unread_messages = Message.unread.for_user(request.user)
