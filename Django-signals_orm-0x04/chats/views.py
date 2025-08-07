@@ -1,3 +1,4 @@
+from django.shortcuts import render
 from .filters import MessageFilter
 from .pagination import MessagePagination
 from .permissions import IsOwnerOrReadOnly, IsParticipantOfConversation
@@ -10,6 +11,8 @@ from django.shortcuts import get_object_or_404
 from rest_framework_simplejwt.views import TokenObtainPairView
 from .auth import MyTokenObtainPairSerializer
 from django_filters.rest_framework import DjangoFilterBackend
+from django.views.decorators.cache import cache_page
+
 
 class ConversationViewSet(viewsets.ModelViewSet):
     queryset = Conversation.objects.all()
@@ -71,3 +74,9 @@ class MessageViewSet(viewsets.ModelViewSet):
 
 class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
+
+@cache_page(60)  # cache timeout 60 seconds
+def conversation_messages_view(request, conversation_id):
+    # Fetch messages for the conversation
+    messages = Message.objects.filter(conversation_id=conversation_id).order_by('timestamp')
+    return render(request, "chats/conversation.html", {"messages": messages})
