@@ -2,6 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect
 from django.contrib.auth import get_user_model
 from django.db.models import Prefetch
+from django.shortcuts import render
 from .models import Message
 
 User = get_user_model()
@@ -33,5 +34,7 @@ def get_all_replies(message):
     fetch_replies(message)
     return replies
 
+@login_required
 def unread_messages_view(request):
-    unread_messages = Message.unread.for_user(request.user)
+    unread_msgs = Message.unread.unread_for_user(request.user)
+    return render(request, "messaging/unread_messages.html", {"messages": unread_msgs})
